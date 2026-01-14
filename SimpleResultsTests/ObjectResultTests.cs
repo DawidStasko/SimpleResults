@@ -59,4 +59,34 @@ public class ObjectResultTests
         Assert.Single(result.Errors, x => x == error1);
         Assert.False(result.Value);
     }
+
+    [Fact]
+    public void Initialization_FailResultWithoutFailures_ThrowsException()
+    {
+        Failure[] emptyFailureList = [];
+
+        var ex = Assert.Throws<ArgumentException>(() => ObjectResult<bool>.Fail());
+
+        Assert.Equal("Failure initialization requires to be initialized with failure.", ex.Message);
+    }
+
+    [Fact]
+    public void Initialization_FailResultWithDifferentFailureTypes_FailuresAssignedProperly()
+    {
+        var error = new Failure("001", FailureType.Error, "Error");
+        var warning = new Failure("002", FailureType.Warning, "Warning");
+
+        var result = ObjectResult<bool>.Fail(error, warning);
+
+        Assert.False(result.IsSuccess, "This result should not be a success.");
+        Assert.True(result.HasErrors, $"Failed result's property {nameof(result.HasErrors)} should return true.");
+        Assert.True(result.HasWarnings, $"Failed result's property {nameof(result.HasWarnings)} should return true.");
+        Assert.True(result.IsFailure, $"Failed result's property {nameof(result.IsFailure)} should return true.");
+
+        Assert.Single(result.Warnings);
+        Assert.Single(result.Warnings, x => x.FailureType == FailureType.Warning);
+        Assert.Single(result.Errors);
+        Assert.Single(result.Errors, x => x.FailureType == FailureType.Error);
+    }
+
 }
