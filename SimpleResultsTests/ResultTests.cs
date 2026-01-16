@@ -179,6 +179,4 @@ public class ResultTests
         Assert.True(result.HasWarnings, $"Failed result's property {nameof(result.HasWarnings)} should return true.");
         Assert.True(result.IsFailure, $"Failed result's property {nameof(result.IsFailure)} should return true.");
     }
-
-
 }

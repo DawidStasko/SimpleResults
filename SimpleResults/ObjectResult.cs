@@ -110,7 +110,7 @@ public record class ObjectResult<T>
     public static ObjectResult<T> Empty(T? value = default) => new() { Value = value };
 
     /// <summary>
-    /// Creates a failed result containing the specified failures.
+    /// Creates a failed <see cref="ObjectResult{T}"/> containing the specified failures.
     /// </summary
     /// <param name="failures">An array of <see cref="Failure"/> instances that describe the reasons for the failure. Must contain at least one
     /// element.</param>
@@ -125,11 +125,23 @@ public record class ObjectResult<T>
     }
 
     /// <summary>
+    /// Converts a <typeparamref name="T"/> instance to a <see cref="Result"/> representing a successful operation.
+    /// </summary>
+    /// <remarks>This implicit conversion allows a <see cref="Failure"/> to be used wherever a <see
+    /// cref="Result"/> is expected, simplifying error handling code.</remarks>
+    /// <param name="failures">The failure information to be encapsulated in the resulting <see cref="Result"/>.</param>
+    public static implicit operator ObjectResult<T>(T value) => Success(value);
+
+    /// <summary>
     /// 
     /// </summary>
-    /// <param name="value"></param>
-    public static implicit operator ObjectResult<T>(T value) => Success(value);
+    /// <param name="failures"></param>
     public static implicit operator ObjectResult<T>(Failure failures) => Fail(failures);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="failures"></param>
     public static implicit operator ObjectResult<T>(Failure[] failures) => Fail(failures);
 
     protected ObjectResult() { }
