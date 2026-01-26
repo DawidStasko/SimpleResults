@@ -1,4 +1,6 @@
-﻿namespace SimpleResults;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SimpleResults;
 
 /// <summary>
 /// Represents the result of an operation that produces a value of type <typeparamref name="T"/>, along with any
@@ -29,13 +31,16 @@ public record class ObjectResult<T>
     public IEnumerable<Failure> Warnings => _result.Warnings;
 
     /// <summary>
-    /// Returns true when result does not contain any error (critical failures) or warning (non-critical failures).
+    /// Returns true when result does not contain any error (critical failures) or warning (non-critical failures), 
+    /// and value must not be null.
     /// </summary>
-    public bool IsSuccess => !Errors.Any() && !Warnings.Any();
+    [MemberNotNullWhen(true, nameof(Value))]
+    public bool IsSuccess => !Errors.Any() && !Warnings.Any() && Value is not null;
 
     /// <summary>
     /// Returns true when result contains any error (critical failures) or warning (non-critical failures).
     /// </summary>
+    [MemberNotNullWhen(false, nameof(Value))]
     public bool IsFailure => Errors.Any() || Warnings.Any();
 
     /// <summary>
