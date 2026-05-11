@@ -1,3 +1,7 @@
+---
+applyTo: "never"
+---
+
 # SimpleResults
 It is just simple implementation of results pattern which in last year I was using a lot. 
 Below couple of words how to use this library, and some practicies I follow when using it 
